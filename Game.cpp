@@ -12,7 +12,7 @@ class game;
 
 class ChampionStats {			//기본스탯
 	string name;
-	vector<string> items;
+	
 	int experience,				//경험치
 		range,					//사거리
 		movementSpeed,			//이동 속도
@@ -35,6 +35,7 @@ class ChampionStats {			//기본스탯
 public:
 	void setName(const string& value) { name = value; } // 이름 설정
 	string getName() const { return name; }				// 이름 반환
+	vector<string> items;
 	ChampionStats() {
 		experience = 0;
 		range = 0;
@@ -249,89 +250,97 @@ void game::getItem() {
 										   "크라켄 학살자","마법사의 최후", "죽음의 무도",
 										   "삼위일체", "루난의 허리케인", "유령 무희" };
 	int randomIndex = rand() % 15; string item = items[randomIndex];
-	player->setItems(item); cout << "플레이어가 " << item << " 아이템을 획득했습니다!" << endl << endl;
-
-	if (player->getItems() > MAX_ITEM_SLOTS - 1) {
+	
+	for (const string& ownedItem : player->items)
+	{
+		if (ownedItem == item) {
+			cout << "플레이어가 이미 " << item << " 아이템을 가지고 있습니다." << endl << endl;
+			return;
+		}
+	}
+	if (player->getItems() >= MAX_ITEM_SLOTS) {
 		cout << "슬롯이 모두 찼으므로 아이템을 더 이상 획득할 수 없습니다." << endl; return;
 	}
 	else {
-	if (item == "영겁의 지팡이") {
-		player->setAbilityPower(player->getAbilityPower() + 60);
-		player->setHealth(player->getHealth() + 400);
-		player->setMana(player->getMana() + 400);
+		player->setItems(item); cout << "플레이어가 " << item << " 아이템을 획득했습니다!" << endl << endl;
 	}
-	else if (item == "대천사의 포옹") {
-		player->setAbilityPower(player->getAbilityPower() + 70);
-		player->setMana(player->getMana() + 860);
-		player->setHealth(player->getHealth() + 200);
-		player->setAbilityhaste(player->getAbilityhaste() + 10);
+		if (item == "영겁의 지팡이") {
+			player->setAbilityPower(player->getAbilityPower() + 30);
+			player->setHealth(player->getHealth() + 200);
+			player->setMana(player->getMana() + 200);
+		}
+		else if (item == "대천사의 포옹") {
+			player->setAbilityPower(player->getAbilityPower() + 45);
+			player->setMana(player->getMana() + 430);
+			player->setHealth(player->getHealth() + 100);
+			player->setAbilityhaste(player->getAbilityhaste() + 5);
+		}
+		else if (item == "존야의 모래시계") {
+			player->setAbilityPower(player->getAbilityPower() + 40);
+			player->setArmor(player->getArmor() + 22);
+			player->setAbilityhaste(player->getAbilityhaste() + 7);
+		}
+		else if (item == "얼어붙은 심장") {
+			player->setArmor(player->getArmor() + 45);
+			player->setMana(player->getMana() + 200);
+			player->setAbilityhaste(player->getAbilityhaste() + 10);
+		}
+		else if (item == "라바돈의 죽음모자") {
+			player->setAbilityPower(player->getAbilityPower() + 60);
+		}
+		else if (item == "우주의 추진력") {
+			player->setAbilityPower(player->getAbilityPower() + 50);
+			player->setAbilityhaste(player->getAbilityhaste() + 15);
+			player->setMovementSpeed(player->getMovementSpeed() + 2);
+		}
+		else if (item == "공허의 지팡이") {
+			player->setAbilityPower(player->getAbilityPower() + 32);
+			player->setMagicPenetration(player->getMagicPenetration() + 20);
+		}
+		else if (item == "몰락한 왕의 검") {
+			player->setAttackDamage(player->getAttackDamage() + 15);
+			player->setAttackSpeed(player->getAttackSpeed() + 1);
+			player->setLifesteal(player->getLifesteal() + 4);
+		}
+		else if (item == "구인수의 격노검") {
+			player->setAttackDamage(player->getAttackDamage() + 10);
+			player->setAbilityPower(player->getAbilityPower() + 15);
+			player->setAttackSpeed(player->getAttackSpeed() + 1);
+		}
+		else if (item == "크라켄 학살자") {
+			player->setAttackDamage(player->getAttackDamage() + 15);
+			player->setAttackSpeed(player->getAttackSpeed() + 1);
+			player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 10);
+		}
+		else if (item == "마법사의 최후") {
+			player->setAttackDamage(player->getAttackDamage() + 15);
+			player->setAttackSpeed(player->getAttackSpeed() + 1);
+			player->setMagicResistance(player->getMagicResistance() + 20);
+		}
+		else if (item == "죽음의 무도") {
+			player->setAttackDamage(player->getAttackDamage() + 20);
+			player->setAbilityhaste(player->getAbilityhaste() + 7);
+			player->setArmor(player->getArmor() + 22);
+		}
+		else if (item == "삼위일체") {
+			player->setAttackDamage(player->getAttackDamage() + 15);
+			player->setAttackSpeed(player->getAttackSpeed() + 1);
+			player->setHealth(player->getHealth() + 150);
+			player->setAbilityhaste(player->getAbilityhaste() + 10);
+		}
+		else if (item == "루난의 허리케인") {
+			player->setAttackSpeed(player->getAttackSpeed() + 3);
+			player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 2);
+			player->setMovementSpeed(player->getMovementSpeed() + 1);
+		}
+		else if (item == "유령 무희") {
+			player->setAttackDamage(player->getAttackDamage() + 10);
+			player->setAttackSpeed(player->getAttackSpeed() + 3);
+			player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 2);
+			player->setMovementSpeed(player->getMovementSpeed() + 1);
+		}
 	}
-	else if (item == "존야의 모래시계") {
-		player->setAbilityPower(player->getAbilityPower() + 80);
-		player->setArmor(player->getArmor() + 45);
-		player->setAbilityhaste(player->getAbilityhaste() + 15);
-	}
-	else if (item == "얼어붙은 심장") {
-		player->setArmor(player->getArmor() + 90);
-		player->setMana(player->getMana() + 400);
-		player->setAbilityhaste(player->getAbilityhaste() + 20);
-	}
-	else if (item == "라바돈의 죽음모자") {
-		player->setAbilityPower(player->getAbilityPower() + 120);
-	}
-	else if (item == "우주의 추진력") {
-		player->setAbilityPower(player->getAbilityPower() + 100);
-		player->setAbilityhaste(player->getAbilityhaste() + 30);
-		player->setMovementSpeed(player->getMovementSpeed() + 5);
-	}
-	else if (item == "공허의 지팡이") {
-		player->setAbilityPower(player->getAbilityPower() + 65);
-		player->setMagicPenetration(player->getMagicPenetration() + 40);
-	}
-	else if (item == "몰락한 왕의 검") {
-		player->setAttackDamage(player->getAttackDamage() + 40);
-		player->setAttackSpeed(player->getAttackSpeed() + 0.40);
-		player->setLifesteal(player->getLifesteal() + 8);
-	}
-	else if (item == "구인수의 격노검") {
-		player->setAttackDamage(player->getAttackDamage() + 30);
-		player->setAbilityPower(player->getAbilityPower() + 30);
-		player->setAttackSpeed(player->getAttackSpeed() + 0.25);
-	}
-	else if (item == "크라켄 학살자") {
-		player->setAttackDamage(player->getAttackDamage() + 40);
-		player->setAttackSpeed(player->getAttackSpeed() + 0.30);
-		player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 20);
-	}
-	else if (item == "마법사의 최후") {
-		player->setAttackDamage(player->getAttackDamage() + 40);
-		player->setAttackSpeed(player->getAttackSpeed() + 0.40);
-		player->setMagicResistance(player->getMagicResistance() + 40);
-	}
-	else if (item == "죽음의 무도") {
-		player->setAttackDamage(player->getAttackDamage() + 55);
-		player->setAbilityhaste(player->getAbilityhaste() + 15);
-		player->setArmor(player->getArmor() + 45);
-	}
-	else if (item == "삼위일체") {
-		player->setAttackDamage(player->getAttackDamage() + 40);
-		player->setAttackSpeed(player->getAttackSpeed() + 0.33);
-		player->setHealth(player->getHealth() + 300);
-		player->setAbilityhaste(player->getAbilityhaste() + 20);
-	}
-	else if (item == "루난의 허리케인") {
-		player->setAttackSpeed(player->getAttackSpeed() + 1);
-		player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 1);
-		player->setMovementSpeed(player->getMovementSpeed() + 1);
-	}
-	else if (item == "유령 무희") {
-		player->setAttackDamage(player->getAttackDamage() + 20);
-		player->setAttackSpeed(player->getAttackSpeed() + 1);
-		player->setCriticalStrikeChance(player->getCriticalStrikeChance() + 1);
-		player->setMovementSpeed(player->getMovementSpeed() + 1);
-	}
-	}
-}
+
 // 여기서 부터가 game 클래스 구현부 
 
 void game::nowStatus()
@@ -360,7 +369,7 @@ void game::fight()
 		return;
 	}
 
-	if(rand()%2 == 0)
+	if (rand() % 2 == 0)
 		changeMonster(slime);
 	else
 		changeMonster(warriorminion);
@@ -405,7 +414,7 @@ void game::fight()
 			// 몬스터의 공격
 			cout << monster->getName() << "님이 공격합니다!" << endl;
 			player->setHealth(player->getHealth() - monster->getAttackDamage());
-			cout << getPlayerName() << "님이 " << monster->getAttackDamage() << "의 피해를 입었습니다!"  << endl;
+			cout << getPlayerName() << "님이 " << monster->getAttackDamage() << "의 피해를 입었습니다!" << endl;
 		}
 
 		// 턴이 끝난 후 상태 출력
